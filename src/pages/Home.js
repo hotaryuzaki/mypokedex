@@ -6,7 +6,7 @@ import '../pokedex.css';
 
 function Home() {
   const [data, setData] = useState([]);
-  const [limit, setLimit] = useState(200);
+  const [limit, setLimit] = useState(20);
   const [offset, setOffset] = useState(0);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(true);
