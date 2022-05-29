@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Alert } from 'react-bootstrap';
 import axios from 'axios';
-import Result from '../components/Result';
+import MonsterList from '../components/MonsterList';
 import '../pokedex.css';
 
 function Home() {
@@ -120,7 +120,7 @@ function Home() {
 
       :
       <div className='Content'>
-        <Result data={memoData}/>
+        <MonsterList data={memoData}/>
         
         {
           loadingMore &&

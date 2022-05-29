@@ -3,7 +3,7 @@ import '../pokedex.css';
 
 const imagePath = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/';
 
-function Result(props) {
+function MonsterList(props) {
   const {
   	data,
   } = props;
@@ -48,4 +48,4 @@ function Result(props) {
   );
 }
 
-export default Result;
+export default MonsterList;
