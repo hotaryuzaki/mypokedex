@@ -3,14 +3,16 @@ import { useParams } from "react-router-dom";
 import { Alert } from 'react-bootstrap';
 import axios from 'axios';
 import '../pokedex.css';
+import MonsterDetail from '../components/MonsterDetail';
 
-function Monster(props) {
+const imagePath = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/';
+
+function Monster() {
   let { id } = useParams();
   const [data, setData] = useState(true);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(true);
 
-  console.log(id);
   // MOUNT FUNCTIONS CALL
   useEffect(() => {
     _getApi();
@@ -134,6 +136,14 @@ function Monster(props) {
 
   }, [id]);
 
+  const IdMonster = ({ id }) => {
+    return (
+      <div className='ItemId'>
+        #{id.toString().padStart(3, '0')}
+      </div>  
+    )
+  }
+
   // RENDER
   return (
     loading
@@ -148,6 +158,33 @@ function Monster(props) {
 
       :
       <div className='Content'>
+        <div className={`Profile ${data[0].pokemons[0].types[0].type.name}`}>
+          <div className='Item'>
+            <div className='ItemBox'>
+              <img
+                src={`${imagePath}${data[0].id}.png`}
+                className='ItemImg'
+                alt='item_image'
+              />
+
+              <IdMonster id={data[0].id} />
+
+              <div className='ItemName'>
+                {data[0].name}
+              </div>
+
+              {
+                data[0].pokemons[0].types.map((arr, i) => (
+                  <span key={i} className={`ItemType ${arr.type.name}`}>
+                    {arr.type.name}
+                  </span>
+                ))
+              }
+            </div>
+          </div>
+          
+          <MonsterDetail data={data} />
+        </div>
       </div>
   );
 }

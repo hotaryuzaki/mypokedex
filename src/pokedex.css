@@ -1,4 +1,5 @@
 :root {
+  --pokemon: #ffcd0352;
   --black: #0f0f0f;
   --ghost: #0f0f0f1e;
   --grey: #eeeeee;
@@ -74,9 +75,56 @@
 .Content {
   width: 100%;
 }
-.Filter {
-  background-color: var(--pink);
+.Profile {
+  display: flex;
+  border-radius: 10px;
+  background-color: var(--pokemon);
 }
+.Detail {
+  width: 100%;
+  display: block;
+  float: left;
+  align-items: center;
+  justify-content: center;
+  /* padding: 10px; */
+  margin: 10px;
+  border-radius: 10px;
+  /* background-color: var(--grey); */
+
+}
+.DetailTabs {
+  border-radius: 10px;
+  /* overflow: hidden; */
+  /* background-color: var(--grey); */
+}
+/* Style the buttons inside the tab */
+.DetailTabs button {
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+/* Create an active/current tablink class */
+.DetailTabs button.active {
+  background-color: var(--grey);
+}
+.DetailTab {
+  border-radius: 10px 10px 0 0;
+  border: none;
+  background-color: var(--ghost);
+}
+/* Style the tab content */
+.DetailContent {
+  display: none;
+  padding: 6px 12px;
+  border-radius: 0 10px 10px 10px;
+  background-color: var(--grey);
+}
+.default {
+  display: block;
+}
+
 .Item {
   width: 25%;
   display: block;
