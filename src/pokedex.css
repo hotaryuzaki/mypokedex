@@ -1,0 +1,160 @@
+:root {
+  --black: #0f0f0f;
+  --ghost: #0f0f0f1e;
+  --grey: #eeeeee;
+  --white: #f0f0f0;
+  --blue: #F0FFFF;
+  --ice: #d3d6fa;
+  --cloud: #f0fcff;
+  --purple: #F8F0FF;
+  --red: #ffdbdb;
+  --pink: #FFF0F0;
+  --green: #F8FFF0;
+  --bug: #ecffd6;
+  --silver: #dbdbdb;
+  --yellow: #fffef0;
+  --brown: #e2cfc4;
+  --orange: #ffdfcd;
+  --gold: #dfc48b;
+  --rock: #d3d3d3;
+}
+
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 100px;
+  pointer-events: none;
+}
+
+.App-header {
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+
+.Loading {
+  height: 50px;
+  margin-bottom: 50px;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .Loading {
+    animation: Loading-spin infinite 1s linear;
+  }
+}
+
+@keyframes Loading-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.Container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-left: 100px;
+  padding-right: 100px;
+}
+.Content {
+  width: 100%;
+}
+.Filter {
+  background-color: var(--pink);
+}
+.Item {
+  width: 25%;
+  display: block;
+  float: left;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}
+.ItemBox {
+  border-radius: 10px;
+  padding: 10px;
+  background-color: var(--grey);
+}
+.ItemImg {
+  width: 100%;
+}
+.ItemName {
+  color: var(--black);
+  font-size: 2vw;
+}
+.ItemType {
+  color: var(--black);
+  font-size: 1vw;
+  border-radius: 5px;
+  padding: 5px 10px;
+  margin: 5px;
+}
+.normal {
+  background-color: var(--bs-body-bg);
+}
+.fire {
+  background-color: var(--red);
+}
+.fairy {
+  background-color: var(--pink);
+}
+.grass {
+  background-color: var(--green);
+}
+.flying {
+  background-color: var(--cloud);
+}
+.water {
+  background-color: var(--blue);
+}
+.poison {
+  background-color: var(--purple);
+}
+.bug {
+  background-color: var(--bug);
+}
+.electric {
+  background-color: var(--yellow);
+}
+.ground {
+  background-color: var(--brown);
+}
+.fighting {
+  background-color: var(--orange);
+}
+.psychic {
+  background-color: var(--gold);
+}
+.rock {
+  background-color: var(--rock);
+}
+.steel {
+  background-color: var(--silver);
+}
+.ice {
+  background-color: var(--ice);
+}
+.ghost {
+  background-color: var(--ghost);
+}
+.dark {
+  background-color: var(--ghost);
+}
+.dragon {
+  background-color: var(--red);
+}
