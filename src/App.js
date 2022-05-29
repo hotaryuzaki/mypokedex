@@ -1,18 +1,23 @@
 import React from 'react';
-import Home from './pages/Home';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Layout from "./pages/Layout";
+import Home from "./pages/Home";
+import Monster from "./pages/Monster";
+
 import './pokedex.css';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src='https://www.freepnglogos.com/uploads/pokemon-logo-text-png-7.png' className="App-logo" alt="logo" />
-      </header>
-
-      <div className='Container'>
-        <Home />
-      </div>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="/:id" element={<Monster />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+    
+    
   );
 }
 
