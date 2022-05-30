@@ -6,7 +6,7 @@ import '../pokedex.css';
 
 function Home() {
   const [data, setData] = useState([]);
-  const [limit, setLimit] = useState(20);
+  const [limit, setLimit] = useState(40);
   const [offset, setOffset] = useState(0);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(true);
@@ -112,7 +112,7 @@ function Home() {
       ?
       <div>
         <img
-          src={'https://upload.wikimedia.org/wikipedia/commons/5/53/Pok%C3%A9_Ball_icon.svg'}
+          src={'pokeball-icon.svg'}
           className="Loading"
           alt="logo"
         />
@@ -126,7 +126,7 @@ function Home() {
           loadingMore &&
             <div>
               <img
-                src={'https://upload.wikimedia.org/wikipedia/commons/5/53/Pok%C3%A9_Ball_icon.svg'}
+                src={'pokeball-icon.svg'}
                 className="Loading"
                 alt="logo"
               />

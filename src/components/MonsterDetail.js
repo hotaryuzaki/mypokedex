@@ -30,19 +30,14 @@ function MonsterDetail(props) {
         <div className='DetailTabs'>
           <button className="DetailTab active" onClick={(event) => openTab(event, 'About')}>About</button>
           <button className="DetailTab" onClick={(event) => openTab(event, 'BaseStats')}>Base Stats</button>
-          <button className="DetailTab" onClick={(event) => openTab(event, 'Evolution')}>Evolution</button>
         </div>
           
         <div id="About" className='DetailContent default'>
-          <p>{data[0].description[0].flavor_text}</p>
+          <p className='DetailText'>{data[0].description[0].flavor_text}</p>
         </div>
     
         <div id="BaseStats" className='DetailContent'>
-          <p>Paris is the capital of France.</p>
-        </div>
-    
-        <div id="Evolution" className="DetailContent">
-          <p>Tokyo is the capital of Japan.</p>
+          <p className='DetailText'>Paris is the capital of France.</p>
         </div>
       </div>
   );

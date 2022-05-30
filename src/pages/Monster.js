@@ -150,7 +150,7 @@ function Monster() {
       ?
       <div>
         <img
-          src={'https://upload.wikimedia.org/wikipedia/commons/5/53/Pok%C3%A9_Ball_icon.svg'}
+          src={'pokeball-icon.svg'}
           className="Loading"
           alt="logo"
         />
