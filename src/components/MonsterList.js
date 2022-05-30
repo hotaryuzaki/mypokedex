@@ -19,7 +19,7 @@ function MonsterList(props) {
   return (
     data &&
       data.data.map((item, index) => (
-        <a href={item.name} key={index}>
+        <a href={`/mypokedex/${item.name}`} key={index}>
           <div className='Item'>
             <div className='ItemBox'>
               <img
