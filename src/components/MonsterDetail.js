@@ -9,17 +9,18 @@ function MonsterDetail(props) {
   } = props;
 
   const openTab = (evt, tabName) => {
-    console.log("hahaha".evt)
     var i, DetailContent, DetailTab;
+
     DetailContent = document.getElementsByClassName("DetailContent");
     for (i = 0; i < DetailContent.length; i++) {
       DetailContent[i].style.display = "none";
     }
+    document.getElementById(tabName).style.display = "block";
+
     DetailTab = document.getElementsByClassName("DetailTab");
     for (i = 0; i < DetailTab.length; i++) {
       DetailTab[i].className = DetailTab[i].className.replace(" active", "");
     }
-    document.getElementById(tabName).style.display = "block";
     evt.currentTarget.className += " active";
   }
 
