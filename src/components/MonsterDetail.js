@@ -37,7 +37,19 @@ function MonsterDetail(props) {
         </div>
     
         <div id="BaseStats" className='DetailContent'>
-          <p className='DetailText'>Paris is the capital of France.</p>
+          {
+            data[0].pokemons[0].stats.map((item, index) => (
+
+              <div>
+                <label className='StatsLabel'>{item.stat.name}</label>
+                <div className="StatsBar progress">
+                  <div className="StatsChart progress-bar" style={{ width: 100}} role="progressbar" aria-valuenow={item.base_stat} aria-valuemin="0" aria-valuemax="10">{item.base_stat}</div>
+                </div>
+              </div>
+            ))
+          }
+
+          
         </div>
       </div>
   );

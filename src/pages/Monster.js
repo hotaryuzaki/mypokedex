@@ -158,32 +158,39 @@ function Monster() {
 
       :
       <div className='Content'>
-        <div className={`Profile ${data[0].pokemons[0].types[0].type.name}`}>
-          <div className='Item'>
-            <div className='ItemBox'>
-              <img
-                src={`${imagePath}${data[0].id}.png`}
-                className='ItemImg'
-                alt='item_image'
-              />
+        <div className={`Monster ${data[0].pokemons[0].types[0].type.name}`}>
+          <div className={'Profile'}>
+            <div className='Item'>
+              <div className='ItemBox'>
+                <img
+                  src={`${imagePath}${data[0].id}.png`}
+                  className='ItemImg'
+                  alt='item_image'
+                />
 
-              <IdMonster id={data[0].id} />
+                <IdMonster id={data[0].id} />
 
-              <div className='ItemName'>
-                {data[0].name}
+                <div className='ItemName'>
+                  {data[0].name}
+                </div>
+
+                {
+                  data[0].pokemons[0].types.map((arr, i) => (
+                    <span key={i} className={`ItemType ${arr.type.name}`}>
+                      {arr.type.name}
+                    </span>
+                  ))
+                }
               </div>
-
-              {
-                data[0].pokemons[0].types.map((arr, i) => (
-                  <span key={i} className={`ItemType ${arr.type.name}`}>
-                    {arr.type.name}
-                  </span>
-                ))
-              }
             </div>
+            
+            <MonsterDetail data={data} />
           </div>
-          
-          <MonsterDetail data={data} />
+
+          <div id="Evolution" className="Evolution">
+            <label>Evolution</label>
+            <p>Evolution</p>
+          </div>
         </div>
       </div>
   );
