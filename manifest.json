@@ -3,18 +3,18 @@
   "name": "My Pokedex",
   "icons": [
     {
-      "src": "https://upload.wikimedia.org/wikipedia/commons/5/53/Pok%C3%A9_Ball_icon.svg",
+      "src": "pokeball-icon.svg",
       "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
+      "type": "image/svg+xml"
     },
     {
-      "src": "https://upload.wikimedia.org/wikipedia/commons/5/53/Pok%C3%A9_Ball_icon.svg",
-      "type": "image/png",
+      "src": "pokeball-icon.svg",
+      "type": "image/svg+xml",
       "sizes": "192x192"
     },
     {
-      "src": "https://upload.wikimedia.org/wikipedia/commons/5/53/Pok%C3%A9_Ball_icon.svg",
-      "type": "image/png",
+      "src": "pokeball-icon.svg",
+      "type": "image/svg+xml",
       "sizes": "512x512"
     }
   ],
