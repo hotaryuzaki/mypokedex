@@ -1,7 +1,5 @@
-import React, { useRef, useState } from 'react';
+import React from 'react';
 import '../pokedex.css';
-
-const imagePath = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/';
 
 function MonsterDetail(props) {
   const {
@@ -39,8 +37,7 @@ function MonsterDetail(props) {
         <div id="BaseStats" className='DetailContent'>
           {
             data[0].pokemons[0].stats.map((item, index) => (
-
-              <div>
+              <div key={index}>
                 <label className='StatsLabel'>{item.stat.name}</label>
                 <div className="StatsBar progress">
                   <div className="StatsChart progress-bar" style={{ width: 100}} role="progressbar" aria-valuenow={item.base_stat} aria-valuemin="0" aria-valuemax="10">{item.base_stat}</div>
@@ -48,8 +45,6 @@ function MonsterDetail(props) {
               </div>
             ))
           }
-
-          
         </div>
       </div>
   );

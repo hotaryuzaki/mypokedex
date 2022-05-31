@@ -4,7 +4,10 @@ import axios from 'axios';
 import MonsterList from '../components/MonsterList';
 import '../pokedex.css';
 
+const pokeballIcon = process.env.PUBLIC_URL+"/pokeball-icon.svg";
+
 function Home() {
+  const [error, setError] = useState([]);
   const [data, setData] = useState([]);
   const [limit, setLimit] = useState(40);
   const [offset, setOffset] = useState(0);
@@ -72,9 +75,12 @@ function Home() {
     }
 
     catch (e) {
-      <Alert variant='danger'>
-        Function _getMonsters error!
-      </Alert>
+      // console.log('error');
+      setError([
+        <Alert variant='danger'>
+          API error: {e}
+        </Alert>
+      ]);
     }
 
   }, [offset]);
@@ -112,10 +118,12 @@ function Home() {
       ?
       <div>
         <img
-          src={'pokeball-icon.svg'}
+          src={pokeballIcon}
           className="Loading"
           alt="logo"
         />
+
+        { error.length > 0 && error }
       </div>
 
       :
@@ -126,7 +134,7 @@ function Home() {
           loadingMore &&
             <div>
               <img
-                src={'pokeball-icon.svg'}
+                src={pokeballIcon}
                 className="Loading"
                 alt="logo"
               />
