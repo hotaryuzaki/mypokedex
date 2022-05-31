@@ -130,6 +130,7 @@
 }
 .DetailText {
   font-size: .8em;
+  margin: 0px;
 }
 .default {
   display: block;

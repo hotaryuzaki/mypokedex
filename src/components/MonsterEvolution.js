@@ -23,7 +23,7 @@ function MonsterEvolution(props) {
               return (
                 <Container>
                   <Row>
-                    <Col xs={5} sm={5} md={5} lg={5}>
+                    <Col xs={4} sm={5} md={5} lg={5}>
                       <img
                         src={`${imagePath}${item.evolves_from_species_id}.png`}
                         className='EvolutionImage'
@@ -31,12 +31,12 @@ function MonsterEvolution(props) {
                       />
                     </Col>
 
-                    <Col xs={2} sm={2} md={2} lg={2} className='EvolutionLevel'>
+                    <Col xs={4} sm={2} md={2} lg={2} className='EvolutionLevel'>
                       <p className='EvolutionLevelText'>Level {item.evolutions[0].min_level}+</p>
                       <FaAngleDoubleRight className='EvolutionLevelIcon'/>
                     </Col>
 
-                    <Col xs={5} sm={5} md={5} lg={5}>
+                    <Col xs={4} sm={5} md={5} lg={5}>
                       <img
                         src={`${imagePath}${item.id}.png`}
                         className='EvolutionImage'
