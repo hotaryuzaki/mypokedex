@@ -3,12 +3,14 @@ import { useParams } from "react-router-dom";
 import { Alert } from 'react-bootstrap';
 import axios from 'axios';
 import '../pokedex.css';
-import MonsterDetail from '../components/MonsterDetail';
+import MonsterProfile from '../components/MonsterProfile';
 
 const imagePath = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/';
+const pokeballIcon = process.env.PUBLIC_URL+"/pokeball-icon.svg";
 
 function Monster() {
   let { id } = useParams();
+  const [error, setError] = useState([]);
   const [data, setData] = useState(true);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(true);
@@ -129,9 +131,12 @@ function Monster() {
     }
 
     catch (e) {
-      <Alert variant='danger'>
-        Function _getMonsters error!
-      </Alert>
+      // console.log('error');
+      setError([
+        <Alert variant='danger'>
+          API error: {e}
+        </Alert>
+      ]);
     }
 
   }, [id]);
@@ -150,7 +155,7 @@ function Monster() {
       ?
       <div>
         <img
-          src={'pokeball-icon.svg'}
+          src={pokeballIcon}
           className="Loading"
           alt="logo"
         />
@@ -158,40 +163,7 @@ function Monster() {
 
       :
       <div className='Content'>
-        <div className={`Monster ${data[0].pokemons[0].types[0].type.name}`}>
-          <div className={'Profile'}>
-            <div className='Item'>
-              <div className='ItemBox'>
-                <img
-                  src={`${imagePath}${data[0].id}.png`}
-                  className='ItemImg'
-                  alt='item_image'
-                />
-
-                <IdMonster id={data[0].id} />
-
-                <div className='ItemName'>
-                  {data[0].name}
-                </div>
-
-                {
-                  data[0].pokemons[0].types.map((arr, i) => (
-                    <span key={i} className={`ItemType ${arr.type.name}`}>
-                      {arr.type.name}
-                    </span>
-                  ))
-                }
-              </div>
-            </div>
-            
-            <MonsterDetail data={data} />
-          </div>
-
-          <div id="Evolution" className="Evolution">
-            <label>Evolution</label>
-            <p>Evolution</p>
-          </div>
-        </div>
+        <MonsterProfile data={data} />
       </div>
   );
 }

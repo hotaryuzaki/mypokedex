@@ -181,10 +181,39 @@
 }
 
 .Evolution {
-  width: 100%;
   display: block;
-  padding: 5px;
-  background-color: var(--silver);
+  padding: 10px;
+  margin: 5px;
+  border-radius: 10px;
+  background-color: var(--grey);
+}
+.EvolutionLevel {
+  display: block;
+  align-self: center;
+}
+.EvolutionLevelText {
+  font-size: 1em;
+  font-weight: bold;
+  text-align: center;
+}
+@media only screen and (max-width: 500px) {
+  .EvolutionLevelText {
+    font-size: .8em;
+  }
+}
+.EvolutionLevelIcon {
+  font-size: 2em;
+  display: flex;
+  margin: auto;
+}
+@media only screen and (max-width: 500px) {
+  .EvolutionLevelIcon {
+    font-size: 1.5em;
+  }
+}
+.EvolutionImage {
+  width: 100%;
+  padding: 10px;
 }
 
 
