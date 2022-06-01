@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Alert } from 'react-bootstrap';
+import { Toast, ToastContainer } from 'react-bootstrap';
 import axios from 'axios';
 import MonsterList from '../components/MonsterList';
 import '../pokedex.css';
@@ -26,9 +26,17 @@ function Home() {
     }
 
     catch (e) {
-      <Alert variant='danger'>
-        Function _getApi error!
-      </Alert>
+      setError([
+        <ToastContainer className="position-fixed p-3" position='bottom-end'>
+          <Toast onClose={() => setError([])} delay={3000} autohide>
+            <Toast.Header>
+              <img src={pokeballIcon} className="ToastImage" alt="toast-icon" />
+              <strong className="me-auto">My Pokedex</strong>
+            </Toast.Header>
+            <Toast.Body>API Gudang Pokemon error nih!</Toast.Body>
+          </Toast>
+        </ToastContainer>
+      ]);
     }
   };
 
@@ -68,6 +76,7 @@ function Home() {
       );
       
       setData([ ...data, ...response.data.data.species ]);
+      setError([]);
 
       // INFINITE SCROLL LOADING ANIMATION
       if (data.length >= response.data.data.species_aggregate.aggregate.count)
@@ -75,11 +84,16 @@ function Home() {
     }
 
     catch (e) {
-      // console.log('error');
       setError([
-        <Alert variant='danger'>
-          API error: {e}
-        </Alert>
+        <ToastContainer className="position-fixed p-3" position='bottom-end'>
+          <Toast onClose={() => setError([])} delay={3000} autohide>
+            <Toast.Header>
+              <img src={pokeballIcon} className="ToastImage" alt="toast-icon" />
+              <strong className="me-auto">My Pokedex</strong>
+            </Toast.Header>
+            <Toast.Body>API Gudang Pokemon error nih!</Toast.Body>
+          </Toast>
+        </ToastContainer>
       ]);
     }
 
@@ -140,6 +154,8 @@ function Home() {
               />
             </div>
         }
+        
+        { error.length > 0 && error }
       </div>
   );
 }

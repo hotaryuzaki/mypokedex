@@ -10,8 +10,6 @@ function MonsterEvolution(props) {
   	data,
   } = props;
 
-  console.log('MonsterEvolution', data)
-
   return (
     data &&
       <div id="Evolution" className="Evolution">
@@ -21,7 +19,7 @@ function MonsterEvolution(props) {
           data.map((item, index) => {
             if (item.evolves_from_species_id) {
               return (
-                <Container>
+                <Container key={index}>
                   <Row>
                     <Col xs={4} sm={5} md={5} lg={5}>
                       <img

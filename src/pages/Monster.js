@@ -1,11 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from "react-router-dom";
-import { Alert } from 'react-bootstrap';
+import { Toast, ToastContainer } from 'react-bootstrap';
 import axios from 'axios';
 import '../pokedex.css';
 import MonsterProfile from '../components/MonsterProfile';
 
-const imagePath = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/';
 const pokeballIcon = process.env.PUBLIC_URL+"/pokeball-icon.svg";
 
 function Monster() {
@@ -13,7 +12,6 @@ function Monster() {
   const [error, setError] = useState([]);
   const [data, setData] = useState(true);
   const [loading, setLoading] = useState(true);
-  const [loadingMore, setLoadingMore] = useState(true);
 
   // MOUNT FUNCTIONS CALL
   useEffect(() => {
@@ -27,9 +25,17 @@ function Monster() {
     }
 
     catch (e) {
-      <Alert variant='danger'>
-        Function _getApi error!
-      </Alert>
+      setError([
+        <ToastContainer className="position-fixed p-3" position='bottom-end'>
+          <Toast onClose={() => setError([])} delay={3000} autohide>
+            <Toast.Header>
+              <img src={pokeballIcon} className="ToastImage" alt="toast-icon" />
+              <strong className="me-auto">My Pokedex</strong>
+            </Toast.Header>
+            <Toast.Body>API Gudang Pokemon error nih!</Toast.Body>
+          </Toast>
+        </ToastContainer>
+      ]);
     }
   };
 
@@ -123,31 +129,25 @@ function Monster() {
       );
       
       setData(response.data.data.species);
+      setError([]);
       // console.log(response.data.data.species);
-
-      // INFINITE SCROLL LOADING ANIMATION
-      if (data.length >= response.data.data.species_aggregate.aggregate.count)
-        setLoadingMore(false);
     }
 
     catch (e) {
-      // console.log('error');
       setError([
-        <Alert variant='danger'>
-          API error: {e}
-        </Alert>
+        <ToastContainer className="position-fixed p-3" position='bottom-end'>
+          <Toast onClose={() => setError([])} delay={3000} autohide>
+            <Toast.Header>
+              <img src={pokeballIcon} className="ToastImage" alt="toast-icon" />
+              <strong className="me-auto">My Pokedex</strong>
+            </Toast.Header>
+            <Toast.Body>API Gudang Pokemon error nih!</Toast.Body>
+          </Toast>
+        </ToastContainer>
       ]);
     }
 
   }, [id]);
-
-  const IdMonster = ({ id }) => {
-    return (
-      <div className='ItemId'>
-        #{id.toString().padStart(3, '0')}
-      </div>  
-    )
-  }
 
   // RENDER
   return (
@@ -159,11 +159,15 @@ function Monster() {
           className="Loading"
           alt="logo"
         />
+
+        { error.length > 0 && error }
       </div>
 
       :
       <div className='Content'>
         <MonsterProfile data={data} />
+
+        { error.length > 0 && error }
       </div>
   );
 }
