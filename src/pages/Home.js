@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Toast, ToastContainer } from 'react-bootstrap';
+import { Button, Container, Navbar, Toast, ToastContainer } from 'react-bootstrap';
+import { FaArrowLeft, FaFilter } from "react-icons/fa";
 import axios from 'axios';
 import MonsterList from '../components/MonsterList';
 import '../pokedex.css';
@@ -130,7 +131,7 @@ function Home() {
   return (
     loading
       ?
-      <div>
+      <div className='LoadingContainer'>
         <img
           src={pokeballIcon}
           className="Loading"
@@ -142,11 +143,35 @@ function Home() {
 
       :
       <div className='Content'>
+        <Navbar bg="light" sticky="top">
+          <Container className='NavbarContainer'>
+            <span className='NavbarLeft'>
+              <a href="/mypokedex/">
+                <FaArrowLeft className='NavbarBack' />
+              </a>
+
+              <header className="App-header">
+                <img src='https://www.freepnglogos.com/uploads/pokemon-logo-text-png-7.png' className="App-logo" alt="logo" />
+              </header>
+            </span>
+            
+            <span className='NavbarRight'>
+              <Button variant="light" size="sm" href='#compare' className='NavbarCompare' >
+                Compare
+              </Button>
+
+              <a href="#filter">
+                <FaFilter className='NavbarFilter' />
+              </a>
+            </span>
+          </Container>
+        </Navbar>
+        
         <MonsterList data={memoData}/>
         
         {
           loadingMore &&
-            <div>
+            <div style={{ marginBottom: 50 }}>
               <img
                 src={pokeballIcon}
                 className="Loading"

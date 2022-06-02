@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from "react-router-dom";
-import { Toast, ToastContainer } from 'react-bootstrap';
+import { Button, Container, Navbar, Toast, ToastContainer } from 'react-bootstrap';
+import { FaArrowLeft, FaFilter } from "react-icons/fa";
 import axios from 'axios';
 import '../pokedex.css';
 import MonsterProfile from '../components/MonsterProfile';
@@ -153,7 +154,7 @@ function Monster() {
   return (
     loading
       ?
-      <div>
+      <div className='LoadingContainer'>
         <img
           src={pokeballIcon}
           className="Loading"
@@ -165,6 +166,30 @@ function Monster() {
 
       :
       <div className='Content'>
+        <Navbar bg="light" sticky="top">
+          <Container className='NavbarContainer'>
+            <span className='NavbarLeft'>
+              <a href="/mypokedex/">
+                <FaArrowLeft className='NavbarBack' />
+              </a>
+
+              <header className="App-header">
+                <img src='https://www.freepnglogos.com/uploads/pokemon-logo-text-png-7.png' className="App-logo" alt="logo" />
+              </header>
+            </span>
+            
+            <span className='NavbarRight'>
+              <Button variant="light" size="sm" href='#compare' className='NavbarCompare' >
+                Compare
+              </Button>
+
+              <a href="#filter">
+                <FaFilter className='NavbarFilter' />
+              </a>
+            </span>
+          </Container>
+        </Navbar>
+
         <MonsterProfile data={data} />
 
         { error.length > 0 && error }

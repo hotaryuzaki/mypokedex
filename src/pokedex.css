@@ -25,31 +25,56 @@
   text-align: center;
 }
 
+.NavbarContainer {
+  justify-content: space-between;
+}
+.NavbarLeft {
+  display: flex;
+}
+.NavbarRight {
+  display: block;
+}
+.NavbarBack {
+  color: var(--black);
+  font-size: 1em;
+  margin-right: 8px;
+}
+.NavbarCompare {
+  color: var(--black);
+  font-size: 1em;
+  margin-right: 10px;
+}
+.NavbarFilter {
+  color: var(--black);
+  font-size: 1em;
+}
 .App-logo {
-  height: 100px;
+  height: 30px;
   pointer-events: none;
 }
-
 .App-header {
-  min-height: 100px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 10px;
+  display: block;
+  float: left;
+  min-height: 30px;
 }
-
 .App-link {
   color: #61dafb;
 }
 
-
+.LoadingContainer {
+  display: flex;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
 .Loading {
   width: 50px;
   height: 50px;
   display: block;
   margin: auto;
-  margin-bottom: 50px;
+  /* margin-bottom: 50px; */
   pointer-events: none;
 }
 .ToastImage {

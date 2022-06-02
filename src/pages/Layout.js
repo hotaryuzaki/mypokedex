@@ -17,34 +17,18 @@ function Layout() {
   
   return(
     <div className='Content'>
-      <header className="App-header">
-        <img src='https://www.freepnglogos.com/uploads/pokemon-logo-text-png-7.png' className="App-logo" alt="logo" />
-      </header>
-
       <div className='Container'>
         <Outlet />
       </div>
       
-      {
-        !online
-          ? // NETWORK OFFLINE
+      { // NETWORK OFFLINE
+        !online &&
           <ToastContainer className="position-fixed p-3" position='bottom-end'>
             <Toast onClose={() => setShow(!show)} show={show} delay={5000} autohide>
               <Toast.Header>
                 <strong className="me-auto">My Pokedex</strong>
               </Toast.Header>
               <Toast.Body>Tidak ada koneksi internet.</Toast.Body>
-            </Toast>
-          </ToastContainer>
-
-          : // NETWORK ONLINE
-          <ToastContainer className="position-fixed p-3" position='bottom-end'>
-            <Toast onClose={() => setShow(!show)} show={!show} delay={5000} autohide>
-              <Toast.Header>
-                <img src={pokeballIcon} className="ToastImage" alt="toast-icon" />
-                <strong className="me-auto">My Pokedex</strong>
-              </Toast.Header>
-              <Toast.Body>Selamat datang di My Pokedex.</Toast.Body>
             </Toast>
           </ToastContainer>
       }

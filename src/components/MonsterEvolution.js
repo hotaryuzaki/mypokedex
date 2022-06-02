@@ -31,7 +31,7 @@ function MonsterEvolution(props) {
 
                     <Col xs={4} sm={2} md={2} lg={2} className='EvolutionLevel'>
                       <p className='EvolutionLevelText'>Level {item.evolutions[0].min_level}+</p>
-                      <FaAngleDoubleRight className='EvolutionLevelIcon'/>
+                      <FaAngleDoubleRight className='EvolutionLevelIcon' />
                     </Col>
 
                     <Col xs={4} sm={5} md={5} lg={5}>
@@ -45,6 +45,8 @@ function MonsterEvolution(props) {
                 </Container>
               );
             }
+
+            return false;
           })
         }
 

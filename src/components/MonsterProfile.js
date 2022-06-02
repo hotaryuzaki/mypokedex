@@ -54,5 +54,18 @@ function MonsterProfile(props) {
   );
 }
 
-export default MonsterProfile;
+const areEqual = (prevProps, nextProps) => {
+  /*
+  return true if passing nextProps to render would return
+  the same result as passing prevProps to render,
+  otherwise return false
+  */
+  if (prevProps.data[0].id !== nextProps.data[0].id) {
+    return false;
+  }
+
+  return true;
+}
+
+export default React.memo(MonsterProfile, areEqual);
   

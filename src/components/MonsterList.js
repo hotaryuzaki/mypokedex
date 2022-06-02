@@ -48,4 +48,17 @@ function MonsterList(props) {
   );
 }
 
-export default MonsterList;
+const areEqual = (prevProps, nextProps) => {
+  /*
+  return true if passing nextProps to render would return
+  the same result as passing prevProps to render,
+  otherwise return false
+  */
+  if (prevProps.data.data.length !== nextProps.data.data.length) {
+    return false;
+  }
+
+  return true;
+}
+
+export default React.memo(MonsterList, areEqual);
