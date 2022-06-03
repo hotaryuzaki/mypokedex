@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Button, Container, Navbar, Toast, ToastContainer } from 'react-bootstrap';
-import { FaArrowLeft, FaFilter } from "react-icons/fa";
+import { Toast, ToastContainer } from 'react-bootstrap';
 import axios from 'axios';
+import MyNavbar from '../components/MyNavbar';
 import MonsterList from '../components/MonsterList';
 import '../pokedex.css';
 
@@ -14,6 +14,7 @@ function Home() {
   const [offset, setOffset] = useState(0);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(true);
+  const [filter, setFilter] = useState([[], []]);
 
   // MOUNT FUNCTIONS CALL
   useEffect(() => {
@@ -41,13 +42,41 @@ function Home() {
     }
   };
 
+  const memoData = useMemo(() => ({
+    data
+  }), [data]); // USEMEMO FOR DATA
+
+  useEffect(() => {
+    let unmounted = false; // FLAG TO CHECK COMPONENT UNMOUNT
+
+    if (!unmounted && loadingMore) {
+      _getMonsters();
+    }
+
+    window.addEventListener("scroll", handleScroll); // attaching scroll event listener
+
+    // CLEAR FUNCTION COMPONENT UNMOUNT
+    return () => unmounted = true;
+
+  }, [offset]);
+
+  const handleScroll = (e) => {
+    let element = e.target.scrollingElement;
+    // console.log(element.scrollHeight - element.scrollTop === element.clientHeight)
+
+    if (element.scrollHeight - element.scrollTop === element.clientHeight) {
+      setOffset(offset + limit);
+    }
+  };
+
+  // GET API DATA LIST
   const _getMonsters = useCallback (async () => {
     try {
       const url = 'https://beta.pokeapi.co/graphql/v1beta';
       const headers = {
         'Content-Type': 'application/json'
       };
-      const query = {
+      const queryNormal = {
         query : `
           query getPokemons {
             species: pokemon_v2_pokemonspecies(limit: ${limit}, offset: ${offset}, order_by: {id: asc}) {
@@ -70,9 +99,35 @@ function Home() {
           }
         `
       };
+      const queryFilter = {
+        query : `
+          query getPokemons {
+            species: pokemon_v2_pokemonspecies(limit: ${limit}, offset: ${offset}, order_by: {id: asc}) {
+              id
+              name
+              pokemons: pokemon_v2_pokemons {
+                id
+                types: pokemon_v2_pokemontypes {
+                  type: pokemon_v2_type {
+                    name
+                  }
+                }
+              }
+            }
+            species_aggregate: pokemon_v2_pokemonspecies_aggregate {
+              aggregate {
+                count
+              }
+            }
+          }
+        `
+      };
+      // const query = ;
+      // console.log('filter', filter.length, filter);
+
       const response = await axios.post(
         url,
-        query,
+        queryNormal,
         { headers }
       );
       
@@ -100,33 +155,74 @@ function Home() {
 
   }, [offset]);
 
-  const memoData = useMemo(() => ({
-    data
-  }), [data]); // USEMEMO FOR DATA
+  const _callbackFilter = useCallback ((data) => {
+    setFilter(data);
+  });
 
-  useEffect(() => {
-    let unmounted = false; // FLAG TO CHECK COMPONENT UNMOUNT
+  // GET API DATA DENGAN FILTER
+  // const _filterMonsters = useCallback (async () => {
+  //   try {
+  //     console.log('filterTypes', filterTypes)
+  //     const url = 'https://beta.pokeapi.co/graphql/v1beta';
+  //     const headers = {
+  //       'Content-Type': 'application/json'
+  //     };
+  //     const query = {
+  //       query : `
+  //         query getPokemons {
+  //           species: pokemon_v2_pokemonspecies(limit: 100, offset: 0, order_by: {id: asc}, where: {pokemon_v2_pokemons: {pokemon_v2_pokemontypes: {pokemon_v2_type: {name: {_in: ${filterTypes}}}}}}) {
+  //             id
+  //             name
+  //             pokemons: pokemon_v2_pokemons {
+  //               id
+  //               types: pokemon_v2_pokemontypes {
+  //                 type: pokemon_v2_type {
+  //                   name
+  //                 }
+  //               }
+  //             }
+  //           }
+  //           species_aggregate: pokemon_v2_pokemonspecies_aggregate(where: {pokemon_v2_pokemons: {pokemon_v2_pokemontypes: {pokemon_v2_type: {name: {_in: ${filterTypes}}}}}}) {
+  //             aggregate {
+  //               count
+  //             }
+  //           }
+  //         }
+  //       `
+  //     };
+  //     const response = await axios.post(
+  //       url,
+  //       query,
+  //       { headers }
+  //     );
 
-    if (!unmounted && loadingMore) {
-      _getMonsters();
-    }
+  //     console.log('_filterMonsters', response.data.data)
+      
+  //     setData([ ...data, ...response.data.data.species ]);
+  //     setError([]);
 
-    window.addEventListener("scroll", handleScroll); // attaching scroll event listener
+  //     // INFINITE SCROLL LOADING ANIMATION
+  //     if (data.length >= response.data.data.species_aggregate.aggregate.count)
+  //       setLoadingMore(false);
+  //   }
 
-    // CLEAR FUNCTION COMPONENT UNMOUNT
-    return () => unmounted = true;
+  //   catch (e) {
+  //     setError([
+  //       <ToastContainer className="position-fixed p-3" position='bottom-end'>
+  //         <Toast onClose={() => setError([])} delay={3000} autohide>
+  //           <Toast.Header>
+  //             <img src={pokeballIcon} className="ToastImage" alt="toast-icon" />
+  //             <strong className="me-auto">My Pokedex</strong>
+  //           </Toast.Header>
+  //           <Toast.Body>API Gudang Pokemon error nih!</Toast.Body>
+  //         </Toast>
+  //       </ToastContainer>
+  //     ]);
+  //   }
 
-  }, [offset]);
+  // }, [offset]);
 
-  const handleScroll = (e) => {
-    let element = e.target.scrollingElement;
-    // console.log(element.scrollHeight - element.scrollTop === element.clientHeight)
-
-    if (element.scrollHeight - element.scrollTop === element.clientHeight) {
-      setOffset(offset + limit);
-    }
-  }
-
+  
   // RENDER
   return (
     loading
@@ -143,29 +239,7 @@ function Home() {
 
       :
       <div className='Content'>
-        <Navbar bg="light" sticky="top">
-          <Container className='NavbarContainer'>
-            <span className='NavbarLeft'>
-              <a href="/mypokedex/">
-                <FaArrowLeft className='NavbarBack' />
-              </a>
-
-              <header className="App-header">
-                <img src='https://www.freepnglogos.com/uploads/pokemon-logo-text-png-7.png' className="App-logo" alt="logo" />
-              </header>
-            </span>
-            
-            <span className='NavbarRight'>
-              <Button variant="light" size="sm" href='#compare' className='NavbarCompare' >
-                Compare
-              </Button>
-
-              <a href="#filter">
-                <FaFilter className='NavbarFilter' />
-              </a>
-            </span>
-          </Container>
-        </Navbar>
+        <MyNavbar hasFilter={true} callbackFilter={_callbackFilter} />
         
         <MonsterList data={memoData}/>
         

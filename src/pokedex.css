@@ -48,6 +48,18 @@
   color: var(--black);
   font-size: 1em;
 }
+.FilterTitle {
+  color: var(--black);
+  font-size: 1em;
+}
+.FilterButton {
+  width: 100px;
+  clear: both;
+  display: flex;
+  float: left;
+  margin: 0 10px 10px;
+}
+
 .App-logo {
   height: 30px;
   pointer-events: none;

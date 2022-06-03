@@ -4,6 +4,7 @@ import { Button, Container, Navbar, Toast, ToastContainer } from 'react-bootstra
 import { FaArrowLeft, FaFilter } from "react-icons/fa";
 import axios from 'axios';
 import '../pokedex.css';
+import MyNavbar from '../components/MyNavbar';
 import MonsterProfile from '../components/MonsterProfile';
 
 const pokeballIcon = process.env.PUBLIC_URL+"/pokeball-icon.svg";
@@ -166,29 +167,7 @@ function Monster() {
 
       :
       <div className='Content'>
-        <Navbar bg="light" sticky="top">
-          <Container className='NavbarContainer'>
-            <span className='NavbarLeft'>
-              <a href="/mypokedex/">
-                <FaArrowLeft className='NavbarBack' />
-              </a>
-
-              <header className="App-header">
-                <img src='https://www.freepnglogos.com/uploads/pokemon-logo-text-png-7.png' className="App-logo" alt="logo" />
-              </header>
-            </span>
-            
-            <span className='NavbarRight'>
-              <Button variant="light" size="sm" href='#compare' className='NavbarCompare' >
-                Compare
-              </Button>
-
-              <a href="#filter">
-                <FaFilter className='NavbarFilter' />
-              </a>
-            </span>
-          </Container>
-        </Navbar>
+        <MyNavbar hasBack={true} />
 
         <MonsterProfile data={data} />
 
