@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { Toast, ToastContainer } from 'react-bootstrap';
+import { Button, Form, Modal, Toast, ToastContainer } from 'react-bootstrap';
 import axios from 'axios';
 import { FilterContext } from '../config/ReactContext';
 import MyNavbar from '../components/MyNavbar';
@@ -7,6 +7,8 @@ import MonsterList from '../components/MonsterList';
 import '../pokedex.css';
 
 const pokeballIcon = process.env.PUBLIC_URL+"/pokeball-icon.svg";
+const imagePath = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/';
+
 
 function Home() {
   const filterContext = useContext(FilterContext);
@@ -14,6 +16,9 @@ function Home() {
   const [data, setData] = useState([]);
   const [limit, setLimit] = useState(40);
   const [offset, setOffset] = useState(0);
+  const [compare, setCompare] = useState([]);
+  const [showCheckbox, setShowCheckbox] = useState(false);
+  const [showCompare, setShowCompare] = useState(false);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(true);
 
@@ -157,11 +162,11 @@ function Home() {
 
   // USEEFFECT INFINITE SCROLL
   useEffect(() => {
-    console.log('USEEFFECT SCROLL', offset);
+    // console.log('USEEFFECT SCROLL', offset);
     let unmounted = false; // FLAG TO CHECK COMPONENT UNMOUNT
 
     if (!unmounted && offset > 0 && loadingMore) {
-      console.log('USEEFFECT SCROLL RUN _getMonsters');
+      // console.log('USEEFFECT SCROLL RUN _getMonsters');
       _getMonsters();
     }
 
@@ -174,11 +179,11 @@ function Home() {
 
   // USEEFFECT FILTER
   useEffect(() => {
-    console.log('USEEFFECT FILTER', offset);
+    // console.log('USEEFFECT FILTER', offset);
     let unmounted = false; // FLAG TO CHECK COMPONENT UNMOUNT
 
     if (!unmounted && filterContext.filterValue) {
-      console.log('USEEFFECT FILTER RUN _getMonsters');
+      // console.log('USEEFFECT FILTER RUN _getMonsters');
       _getMonsters();
     }
 
@@ -189,10 +194,8 @@ function Home() {
 
   const handleScroll = (e) => {
     let element = e.target.scrollingElement;
-    console.log('handleScroll', element.scrollHeight - element.scrollTop === element.clientHeight)
 
     if (element.scrollHeight - element.scrollTop === element.clientHeight) {
-      console.log('handleScroll RUUUUUN')
       setOffset(offset + limit);
     }
   };
@@ -215,43 +218,95 @@ function Home() {
 
   }, [filterContext.filterValue]);
 
+  const _callbackShowCheckbox = useCallback((data) => {    
+    // console.log('Home _callbackShowCheckbox HAHAHA', data)
+    setShowCheckbox(data);
+  }, [showCheckbox]);
+
+  const _callbackShowCompare = useCallback((data) => {
+    // console.log('Home _callbackShowCompare', data)
+    setShowCompare(data);
+  }, [filterContext.filterValue]);
+
+  const _callbackCheckbox = useCallback((data) => {
+    // console.log('Home _callbackCheckbox hahaha', data)
+    setCompare(data);
+    if (data.length > 0) setShowCompare(true);
+    else setShowCompare(false);
+  }, [compare]);
+
   const memoData = useMemo(() => ({
     data
   }), [data]); // USEMEMO FOR DATA
+
+  const CompareModal = useCallback (({ data, show }) => {
+    if (!show) return false;
+
+    return (
+      <div className='CompareModal'>
+        <div className='CompareModalContainer'>
+          <div className='CompareModalContent'>
+            <span className='CompareModalImages'>
+              {
+                data.map((item) => {
+                  return (
+                    <img
+                      key={item.id}
+                      src={`${imagePath}${item.id}.png`}
+                      className="CompareModalImg"
+                      alt={`logo-${item.id}`}
+                    />
+                  )
+                })
+              }
+            </span>
+
+            <span className='CompareModalButtonContainer'>
+              <Button
+                className='CompareModalButton'
+                style={{ margin: 10}}
+                onClick={() => setShowCompare(false)}
+                href={`/mypokedex/compare/${data[0].id}/${data[1]?.id?? undefined}`}
+              >
+                Compare
+              </Button>
+            </span>
+          </div>
+        </div>
+      </div>
+    );
+    
+  }, [compare]);
+
   
   // RENDER
-  return (
-    loading
-      ?
-      <div className='LoadingContainer'>
-        <img
-          src={pokeballIcon}
-          className="Loading"
-          alt="logo"
-        />
+  return loading ? (
+    <div className="LoadingContainer">
+      <img src={pokeballIcon} className="Loading" alt="logo" />
 
-        { error.length > 0 && error }
-      </div>
+      {error.length > 0 && error}
+    </div>
+  ) : (
+    <div className="Content">
+      <MyNavbar
+        hasFilter={true}
+        compare={showCompare}
+        callbackFilter={_callbackFilter}
+        callbackShowCheckbox={_callbackShowCheckbox}
+      />
 
-      :
-      <div className='Content'>
-        <MyNavbar hasFilter={true} callbackFilter={_callbackFilter} />
-        
-        <MonsterList data={memoData}/>
-        
-        {
-          loadingMore &&
-            <div style={{ marginBottom: 50 }}>
-              <img
-                src={pokeballIcon}
-                className="Loading"
-                alt="logo"
-              />
-            </div>
-        }
-        
-        { error.length > 0 && error }
-      </div>
+      <MonsterList data={memoData} showCheckbox={showCheckbox} callbackCheckbox={_callbackCheckbox} />
+
+      <CompareModal data={compare} show={showCompare} />
+
+      {loadingMore && (
+        <div style={{ marginBottom: 50 }}>
+          <img src={pokeballIcon} className="Loading" alt="logo" />
+        </div>
+      )}
+
+      {error.length > 0 && error}
+    </div>
   );
 }
 

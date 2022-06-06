@@ -9,10 +9,17 @@ function MyNavbar(props) {
   const {
   	hasFilter = false,
     hasBack = false,
-    callbackFilter
+    compare,
+    callbackFilter,
+    callbackShowCheckbox
   } = props;
+  const [showCheckbox, setShowCheckbox] = useState(compare);
   const [showModal, setShowModal] = useState(false);
   const [filter, setFilter] = useState([...filterContext.filterValue]); // COPY ARRAY VALUE NOT REFERENCE!
+
+  useEffect (() => {
+    callbackShowCheckbox(showCheckbox);
+  }, [showCheckbox])
 
   const setChecked = async (object, i, name, value) => {
     let update = JSON.parse(JSON.stringify(filter)); // DEEP COPY ARRAY NEEDED!
@@ -59,7 +66,6 @@ function MyNavbar(props) {
 
     setFilter(update);
   };
-
 
   const FilterTypes = () => {
     let data = [];
@@ -121,66 +127,75 @@ function MyNavbar(props) {
 
   return (
     <>
-      <Navbar className='Navbar' sticky="top">
-        <Container className='NavbarContainer'>
-          <span className='NavbarLeft'>
-            {
-              hasBack && (
-                <a key='hasBack' href="/mypokedex/">
-                  <FaArrowLeft className='NavbarBack' />
-                </a>
-              )
-            }
+      <Navbar className="Navbar" sticky="top">
+        <Container className="NavbarContainer">
+          <span className="NavbarLeft">
+            {hasBack && (
+              <a key="hasBack" href="/mypokedex/">
+                <FaArrowLeft className="NavbarBack" />
+              </a>
+            )}
 
-            <header key='NavbarLeft' className="App-header">
-              <img src='https://www.freepnglogos.com/uploads/pokemon-logo-text-png-7.png' className="App-logo" alt="logo" />
+            <header key="NavbarLeft" className="App-header">
+              <img
+                src="https://www.freepnglogos.com/uploads/pokemon-logo-text-png-7.png"
+                className="App-logo"
+                alt="logo"
+              />
             </header>
           </span>
-          
-          {
-            hasFilter && (
-              <span key='hasFilter' className='NavbarRight'>
-                <Button variant="light" size="sm" href='#compare' className='NavbarCompare' >
-                  Compare
-                </Button>
 
-                <a className='NavbarFilter' href="#filter" onClick={() => setShowModal(true)}>
-                  <FaFilter className='NavbarFilterIcon' />
-                  {
-                    filter[2].count > 0 &&
-                      <span className='FilterBadge'>
-                        {filter[2].count}
-                      </span>
-                  }
-                </a>
-              </span>
-            )
-        }
+          {hasFilter && (
+            <span key="hasFilter" className="NavbarRight">
+              <Button
+                variant="light"
+                size="sm"
+                href="#compare"
+                className="NavbarCompare"
+                onClick={() => setShowCheckbox(!showCheckbox)}
+              >
+                Compare
+              </Button>
+
+              <a
+                className="NavbarFilter"
+                href="#filter"
+                onClick={() => setShowModal(true)}
+              >
+                <FaFilter className="NavbarFilterIcon" />
+                {filter[2].count > 0 && (
+                  <span className="FilterBadge">{filter[2].count}</span>
+                )}
+              </a>
+            </span>
+          )}
         </Container>
       </Navbar>
 
-      <Modal show={showModal} fullscreen='lg-down' onHide={() => setShowModal(false)}>
+      <Modal
+        show={showModal}
+        fullscreen="lg-down"
+        onHide={() => setShowModal(false)}
+      >
         <Modal.Header closeButton>
           <Modal.Title>Filter</Modal.Title>
         </Modal.Header>
 
-        <div className='FilterContainer'>
-          <div className='FilterSegment'>
+        <div className="FilterContainer">
+          <div className="FilterSegment">
             <FilterTypes />
           </div>
-          <div className='FilterSegment'>
+          <div className="FilterSegment">
             <FilterGen />
           </div>
         </div>
 
         <Button
-          style={{ margin: 10}}
-          onClick={
-            () => {
-              callbackFilter(filter);
-              setShowModal(false);
-            }
-          }
+          style={{ margin: 10 }}
+          onClick={() => {
+            callbackFilter(filter);
+            setShowModal(false);
+          }}
         >
           Terapkan Filter
         </Button>
