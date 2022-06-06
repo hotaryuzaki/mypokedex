@@ -1,6 +1,7 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { Toast, ToastContainer } from 'react-bootstrap';
 import axios from 'axios';
+import { FilterContext } from '../config/ReactContext';
 import MyNavbar from '../components/MyNavbar';
 import MonsterList from '../components/MonsterList';
 import '../pokedex.css';
@@ -8,13 +9,13 @@ import '../pokedex.css';
 const pokeballIcon = process.env.PUBLIC_URL+"/pokeball-icon.svg";
 
 function Home() {
+  const filterContext = useContext(FilterContext);
   const [error, setError] = useState([]);
   const [data, setData] = useState([]);
   const [limit, setLimit] = useState(40);
   const [offset, setOffset] = useState(0);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(true);
-  const [filter, setFilter] = useState([[], []]);
 
   // MOUNT FUNCTIONS CALL
   useEffect(() => {
@@ -41,34 +42,7 @@ function Home() {
       ]);
     }
   };
-
-  const memoData = useMemo(() => ({
-    data
-  }), [data]); // USEMEMO FOR DATA
-
-  useEffect(() => {
-    let unmounted = false; // FLAG TO CHECK COMPONENT UNMOUNT
-
-    if (!unmounted && loadingMore) {
-      _getMonsters();
-    }
-
-    window.addEventListener("scroll", handleScroll); // attaching scroll event listener
-
-    // CLEAR FUNCTION COMPONENT UNMOUNT
-    return () => unmounted = true;
-
-  }, [offset]);
-
-  const handleScroll = (e) => {
-    let element = e.target.scrollingElement;
-    // console.log(element.scrollHeight - element.scrollTop === element.clientHeight)
-
-    if (element.scrollHeight - element.scrollTop === element.clientHeight) {
-      setOffset(offset + limit);
-    }
-  };
-
+  
   // GET API DATA LIST
   const _getMonsters = useCallback (async () => {
     try {
@@ -76,10 +50,54 @@ function Home() {
       const headers = {
         'Content-Type': 'application/json'
       };
-      const queryNormal = {
+      
+      const queryTypes =
+        filterContext.filterValue[2].type.length > 0
+          ?
+          `pokemon_v2_pokemons: {
+            pokemon_v2_pokemontypes: {
+              pokemon_v2_type: {
+                name: {
+                  _in: [${filterContext.filterValue[2].type}]
+                }
+              }
+            }
+          }`
+          : '';
+          
+      const queryGen =
+        filterContext.filterValue[2].gen.length > 0
+          ?
+          `pokemon_v2_generation: {
+            name: {
+              _in: [${filterContext.filterValue[2].gen}]
+            }
+          }`
+          : '';
+      
+      // console.log("queryTypes queryGen", queryTypes, queryGen)
+      
+      var queryFilter = '';
+      var aggregateFilter = '';
+      if (filterContext.filterValue[2].type.length > 0 && filterContext.filterValue[2].gen.length > 0) {
+        queryFilter = `, where: { ${queryTypes}, ${queryGen} }`;
+        aggregateFilter = `(where: { ${queryTypes}, ${queryGen} })`;
+      }
+      else if (filterContext.filterValue[2].type.length > 0) {
+        queryFilter = `, where: { ${queryTypes} }`;
+        aggregateFilter = `(where: { ${queryTypes} })`;
+      }
+      else if (filterContext.filterValue[2].gen.length > 0) {
+        queryFilter = `, where: { ${queryGen} }`;
+        aggregateFilter = `(where: { ${queryGen} })`;
+      }
+
+      // console.log('queryFilter', queryFilter);
+
+      const query = {
         query : `
           query getPokemons {
-            species: pokemon_v2_pokemonspecies(limit: ${limit}, offset: ${offset}, order_by: {id: asc}) {
+            species: pokemon_v2_pokemonspecies(limit: ${limit}, offset: ${offset}, order_by: {id: asc} ${queryFilter}) {
               id
               name
               pokemons: pokemon_v2_pokemons {
@@ -91,7 +109,7 @@ function Home() {
                 }
               }
             }
-            species_aggregate: pokemon_v2_pokemonspecies_aggregate {
+            species_aggregate: pokemon_v2_pokemonspecies_aggregate ${aggregateFilter} {
               aggregate {
                 count
               }
@@ -99,39 +117,21 @@ function Home() {
           }
         `
       };
-      const queryFilter = {
-        query : `
-          query getPokemons {
-            species: pokemon_v2_pokemonspecies(limit: ${limit}, offset: ${offset}, order_by: {id: asc}) {
-              id
-              name
-              pokemons: pokemon_v2_pokemons {
-                id
-                types: pokemon_v2_pokemontypes {
-                  type: pokemon_v2_type {
-                    name
-                  }
-                }
-              }
-            }
-            species_aggregate: pokemon_v2_pokemonspecies_aggregate {
-              aggregate {
-                count
-              }
-            }
-          }
-        `
-      };
-      // const query = ;
-      // console.log('filter', filter.length, filter);
+      
+      // console.log(query);
 
       const response = await axios.post(
         url,
-        queryNormal,
+        query,
         { headers }
       );
       
-      setData([ ...data, ...response.data.data.species ]);
+      if (offset === 0) {
+        setData(response.data.data.species);
+        setLoading(false);
+      }
+      else setData([ ...data, ...response.data.data.species ]);
+      
       setError([]);
 
       // INFINITE SCROLL LOADING ANIMATION
@@ -153,75 +153,71 @@ function Home() {
       ]);
     }
 
+  }, [filterContext, offset]);
+
+  // USEEFFECT INFINITE SCROLL
+  useEffect(() => {
+    console.log('USEEFFECT SCROLL', offset);
+    let unmounted = false; // FLAG TO CHECK COMPONENT UNMOUNT
+
+    if (!unmounted && offset > 0 && loadingMore) {
+      console.log('USEEFFECT SCROLL RUN _getMonsters');
+      _getMonsters();
+    }
+
+    window.addEventListener("scroll", handleScroll); // attaching scroll event listener
+
+    // CLEAR FUNCTION COMPONENT UNMOUNT
+    return () => unmounted = true;
+
   }, [offset]);
 
-  const _callbackFilter = useCallback ((data) => {
-    setFilter(data);
-  });
+  // USEEFFECT FILTER
+  useEffect(() => {
+    console.log('USEEFFECT FILTER', offset);
+    let unmounted = false; // FLAG TO CHECK COMPONENT UNMOUNT
 
-  // GET API DATA DENGAN FILTER
-  // const _filterMonsters = useCallback (async () => {
-  //   try {
-  //     console.log('filterTypes', filterTypes)
-  //     const url = 'https://beta.pokeapi.co/graphql/v1beta';
-  //     const headers = {
-  //       'Content-Type': 'application/json'
-  //     };
-  //     const query = {
-  //       query : `
-  //         query getPokemons {
-  //           species: pokemon_v2_pokemonspecies(limit: 100, offset: 0, order_by: {id: asc}, where: {pokemon_v2_pokemons: {pokemon_v2_pokemontypes: {pokemon_v2_type: {name: {_in: ${filterTypes}}}}}}) {
-  //             id
-  //             name
-  //             pokemons: pokemon_v2_pokemons {
-  //               id
-  //               types: pokemon_v2_pokemontypes {
-  //                 type: pokemon_v2_type {
-  //                   name
-  //                 }
-  //               }
-  //             }
-  //           }
-  //           species_aggregate: pokemon_v2_pokemonspecies_aggregate(where: {pokemon_v2_pokemons: {pokemon_v2_pokemontypes: {pokemon_v2_type: {name: {_in: ${filterTypes}}}}}}) {
-  //             aggregate {
-  //               count
-  //             }
-  //           }
-  //         }
-  //       `
-  //     };
-  //     const response = await axios.post(
-  //       url,
-  //       query,
-  //       { headers }
-  //     );
+    if (!unmounted && filterContext.filterValue) {
+      console.log('USEEFFECT FILTER RUN _getMonsters');
+      _getMonsters();
+    }
 
-  //     console.log('_filterMonsters', response.data.data)
-      
-  //     setData([ ...data, ...response.data.data.species ]);
-  //     setError([]);
+    // CLEAR FUNCTION COMPONENT UNMOUNT
+    return () => unmounted = true;
 
-  //     // INFINITE SCROLL LOADING ANIMATION
-  //     if (data.length >= response.data.data.species_aggregate.aggregate.count)
-  //       setLoadingMore(false);
-  //   }
+  }, [filterContext.filterValue]);
 
-  //   catch (e) {
-  //     setError([
-  //       <ToastContainer className="position-fixed p-3" position='bottom-end'>
-  //         <Toast onClose={() => setError([])} delay={3000} autohide>
-  //           <Toast.Header>
-  //             <img src={pokeballIcon} className="ToastImage" alt="toast-icon" />
-  //             <strong className="me-auto">My Pokedex</strong>
-  //           </Toast.Header>
-  //           <Toast.Body>API Gudang Pokemon error nih!</Toast.Body>
-  //         </Toast>
-  //       </ToastContainer>
-  //     ]);
-  //   }
+  const handleScroll = (e) => {
+    let element = e.target.scrollingElement;
+    console.log('handleScroll', element.scrollHeight - element.scrollTop === element.clientHeight)
 
-  // }, [offset]);
+    if (element.scrollHeight - element.scrollTop === element.clientHeight) {
+      console.log('handleScroll RUUUUUN')
+      setOffset(offset + limit);
+    }
+  };
 
+  const _callbackFilter = useCallback((data) => {
+    const prevProps = filterContext.filterValue[2];
+    const nextProps = data[2];
+
+    // TO IMPROVE PERFORMANCE WE CHECK PROPS MANUALLY INSIDE ARRAY
+    if (
+      JSON.stringify(prevProps.type) !== JSON.stringify(nextProps.type)
+      ||
+      JSON.stringify(prevProps.gen) !== JSON.stringify(nextProps.gen)
+    ) {
+      setLoading(true); // RESET PAGE LOADING
+      setLoadingMore(true); // RESET PAGE LOADING MORE
+      setOffset(0); // RESET PAGING
+      filterContext.setFilterValue(data);
+    }
+
+  }, [filterContext.filterValue]);
+
+  const memoData = useMemo(() => ({
+    data
+  }), [data]); // USEMEMO FOR DATA
   
   // RENDER
   return (

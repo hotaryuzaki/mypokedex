@@ -20,14 +20,14 @@ const filterTypes = [
 ];
 
 const filterGen = [
-  { name: 'I', value: false },
-  { name: 'II', value: false },
-  { name: 'III', value: false },
-  { name: 'IV', value: false },
-  { name: 'V', value: false },
-  { name: 'VI', value: false },
-  { name: 'VII', value: false },
-  { name: 'VIII', value: false }
+  { name: 'I', query: 'generation-i', value: false },
+  { name: 'II', query: 'generation-ii', value: false },
+  { name: 'III', query: 'generation-iii', value: false },
+  { name: 'IV', query: 'generation-iv', value: false },
+  { name: 'V', query: 'generation-v', value: false },
+  { name: 'VI', query: 'generation-vi', value: false },
+  { name: 'VII', query: 'generation-vii', value: false },
+  { name: 'VIII', query: 'generation-viii', value: false }
 ];
 
 export default {

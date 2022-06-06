@@ -25,6 +25,9 @@
   text-align: center;
 }
 
+.Navbar {
+  background-color: white;
+}
 .NavbarContainer {
   justify-content: space-between;
 }
@@ -45,6 +48,10 @@
   margin-right: 10px;
 }
 .NavbarFilter {
+  position: relative;
+  padding-right: 10px;  
+}
+.NavbarFilterIcon {
   color: var(--black);
   font-size: 1em;
 }
@@ -52,12 +59,25 @@
   color: var(--black);
   font-size: 1em;
 }
+.FilterContainer {
+  display: block;
+  padding: 10px;
+}
+.FilterSegment {
+  display: block;
+  margin-bottom: 10px;
+}
 .FilterButton {
-  width: 100px;
-  clear: both;
-  display: flex;
-  float: left;
-  margin: 0 10px 10px;
+  margin: 0 5px 10px;
+}
+.FilterBadge {
+  color: var(--white);
+  font-size: .8em;
+  position: absolute;
+  left: 12px;
+  padding: 0px 5px;
+  border-radius: 50px;
+  background-color: rgb(236, 49, 49);
 }
 
 .App-logo {

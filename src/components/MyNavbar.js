@@ -1,32 +1,65 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Button, Container, Modal, Navbar, ToggleButton } from 'react-bootstrap';
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { Badge, Button, Container, Modal, Navbar, ToggleButton } from 'react-bootstrap';
 import { FaArrowLeft, FaFilter } from "react-icons/fa";
+import { FilterContext } from '../config/ReactContext';
 import '../pokedex.css';
-import filterObjects from '../filterObjects.js';
 
 function MyNavbar(props) {
+  const filterContext = useContext(FilterContext);
   const {
   	hasFilter = false,
     hasBack = false,
     callbackFilter
   } = props;
   const [showModal, setShowModal] = useState(false);
-  const [filter, setFilter] = useState([filterObjects.filterTypes, filterObjects.filterGen]);
+  const [filter, setFilter] = useState([...filterContext.filterValue]); // COPY ARRAY VALUE NOT REFERENCE!
 
-  useEffect(() => {
-    // console.log('NEW', filter);
+  const setChecked = async (object, i, name, value) => {
+    let update = JSON.parse(JSON.stringify(filter)); // DEEP COPY ARRAY NEEDED!
+    let filterParams = [];
 
-  }, [filter]);
+    // TO REMOVE OBJECT FILTER
+    const filterChecked = (item) => {
+      // console.log(item, `"${name}"`);
+      return item !== `"${name}"`;
+    }
 
-  const setChecked = (name, i, value) => {
-    let update = [...filter];
-    console.log(name, i, value);
-    // console.log(i, update[0][i]);
-    if (name === 'filterTypes') update[0][i].value = value;
-    else update = update[1][i].value = value;
+    // FILTER BY TYPES
+    if (object === 'filterTypes') {
+      update[0][i].value = value;
+
+      if (value === true) {
+        update[2].count += 1;
+        update[2].type.push(`"${name}"`);
+      }
+      else {
+        update[2].count -= 1;
+        filterParams = update[2].type.filter(filterChecked);
+        update[2].type = filterParams;
+      }
+    }
+
+    // FILTER BY GENS
+    else {
+      update[1][i].value = value;
+
+      if (value === true) {
+        update[2].count += 1;
+        update[2].gen.push(`"${name}"`);
+      }
+      else {
+        update[2].count -= 1;
+        filterParams = update[2].gen.filter(filterChecked);
+        update[2].gen = filterParams;
+      }
+    }
+
+    // console.log(object, i, name, value);
+    // console.log(update[2]);
 
     setFilter(update);
   };
+
 
   const FilterTypes = () => {
     let data = [];
@@ -36,25 +69,23 @@ function MyNavbar(props) {
     );
 
     filter[0].map((item, index) => {
-      // console.log('FilterTypes', index);
       data.push(
         <ToggleButton
           key={`FilterTypes-${index}`}
+          id={`FilterTypes-${index}`}
           className="FilterButton"
           size="sm"
-          id="FilterTypes-check"
           type="checkbox"
           variant="outline-primary"
           checked={item.value}
-          value={item.name}
-          onChange={(e) => setChecked('filterTypes', index, !item.value)}
+          onChange={(e) => setChecked('filterTypes', index, item.name, !item.value)}
         >
           {item.name}
         </ToggleButton>
       );
-    });
 
-    // console.log(data);
+      return true;
+    });
 
     return data;
   };
@@ -63,60 +94,64 @@ function MyNavbar(props) {
     let data = [];
 
     data.push(
-      <p className='FilterGen' key='FilterGen-title'>By Generations</p>  
+      <p className='FilterTitle' key='FilterGen-title'>By Generations</p>  
     );
 
     filter[1].map((item, index) => {
-      // console.log('FilterTypes', index);
       data.push(
         <ToggleButton
           key={`FilterGen-${index}`}
+          id={`FilterGen-${index}`}
           className="FilterButton"
           size="sm"
-          id="FilterGen-check"
           type="checkbox"
           variant="outline-primary"
           checked={item.value}
-          value={item.name}
-          onChange={(e) => setChecked('filterTypes', index, !item.value)}
-        >
-          {item.name}
+          onChange={(e) => setChecked('filterGen', index, item.query, !item.value)}
+          >
+            {item.name}
         </ToggleButton>
       );
-    });
 
-    // console.log(data);
+      return true;
+    });
 
     return data;
   };
 
   return (
     <>
-      <Navbar bg="light" sticky="top">
+      <Navbar className='Navbar' sticky="top">
         <Container className='NavbarContainer'>
           <span className='NavbarLeft'>
             {
               hasBack && (
-                <a href="/mypokedex/">
+                <a key='hasBack' href="/mypokedex/">
                   <FaArrowLeft className='NavbarBack' />
                 </a>
               )
             }
 
-            <header className="App-header">
+            <header key='NavbarLeft' className="App-header">
               <img src='https://www.freepnglogos.com/uploads/pokemon-logo-text-png-7.png' className="App-logo" alt="logo" />
             </header>
           </span>
           
           {
             hasFilter && (
-              <span className='NavbarRight'>
+              <span key='hasFilter' className='NavbarRight'>
                 <Button variant="light" size="sm" href='#compare' className='NavbarCompare' >
                   Compare
                 </Button>
 
-                <a href="#filter" onClick={() => setShowModal(true)}>
-                  <FaFilter className='NavbarFilter' />
+                <a className='NavbarFilter' href="#filter" onClick={() => setShowModal(true)}>
+                  <FaFilter className='NavbarFilterIcon' />
+                  {
+                    filter[2].count > 0 &&
+                      <span className='FilterBadge'>
+                        {filter[2].count}
+                      </span>
+                  }
                 </a>
               </span>
             )
@@ -125,24 +160,31 @@ function MyNavbar(props) {
       </Navbar>
 
       <Modal show={showModal} fullscreen='lg-down' onHide={() => setShowModal(false)}>
-          <Modal.Header closeButton>
-            <Modal.Title>Filter</Modal.Title>
-          </Modal.Header>
+        <Modal.Header closeButton>
+          <Modal.Title>Filter</Modal.Title>
+        </Modal.Header>
 
-          <FilterTypes />
-          <FilterGen />
-          
+        <div className='FilterContainer'>
+          <div className='FilterSegment'>
+            <FilterTypes />
+          </div>
+          <div className='FilterSegment'>
+            <FilterGen />
+          </div>
+        </div>
 
-          <Button
-            // onClick={
-            //   () => {
-            //     callbackFilter(['fire']);
-            //   }
-            // }
-          >
-            Filter
-          </Button>
-        </Modal>
+        <Button
+          style={{ margin: 10}}
+          onClick={
+            () => {
+              callbackFilter(filter);
+              setShowModal(false);
+            }
+          }
+        >
+          Terapkan Filter
+        </Button>
+      </Modal>
     </>
   );
 }

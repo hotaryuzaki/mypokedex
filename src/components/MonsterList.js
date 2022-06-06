@@ -54,9 +54,8 @@ const areEqual = (prevProps, nextProps) => {
   the same result as passing prevProps to render,
   otherwise return false
   */
-  if (prevProps.data.data.length !== nextProps.data.data.length) {
-    return false;
-  }
+  if (prevProps.data.data.length !== nextProps.data.data.length) return false;
+  else if (JSON.stringify(prevProps.data.data) !== JSON.stringify(nextProps.data.data)) return false;
 
   return true;
 }
