@@ -4,8 +4,6 @@ import { Toast, ToastContainer } from 'react-bootstrap';
 import useNetwork from "../hooks/useNetwork";
 import '../pokedex.css';
 
-const pokeballIcon = process.env.PUBLIC_URL+"/pokeball-icon.svg";
-
 function Layout() {
   const networkState = useNetwork();
   const { online } = networkState;

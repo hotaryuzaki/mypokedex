@@ -1,8 +1,10 @@
-import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { Badge, Button, Container, Modal, Navbar, ToggleButton } from 'react-bootstrap';
+import React, { useContext, useEffect, useState } from 'react';
+import { Button, Container, Modal, Navbar, ToggleButton } from 'react-bootstrap';
 import { FaArrowLeft, FaFilter } from "react-icons/fa";
 import { FilterContext } from '../config/ReactContext';
 import '../pokedex.css';
+
+const pokemonLogo = process.env.PUBLIC_URL+"/pokemon-logo.png";
 
 function MyNavbar(props) {
   const filterContext = useContext(FilterContext);
@@ -18,7 +20,7 @@ function MyNavbar(props) {
   const [filter, setFilter] = useState([...filterContext.filterValue]); // COPY ARRAY VALUE NOT REFERENCE!
 
   useEffect (() => {
-    callbackShowCheckbox(showCheckbox);
+    if (hasFilter) callbackShowCheckbox(showCheckbox);
   }, [showCheckbox])
 
   const setChecked = async (object, i, name, value) => {
@@ -138,7 +140,7 @@ function MyNavbar(props) {
 
             <header key="NavbarLeft" className="App-header">
               <img
-                src="https://www.freepnglogos.com/uploads/pokemon-logo-text-png-7.png"
+                src={pokemonLogo}
                 className="App-logo"
                 alt="logo"
               />

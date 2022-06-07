@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { Button, Form, Modal, Toast, ToastContainer } from 'react-bootstrap';
+import { Button, Toast, ToastContainer } from 'react-bootstrap';
 import axios from 'axios';
 import { FilterContext } from '../config/ReactContext';
 import MyNavbar from '../components/MyNavbar';
@@ -266,7 +266,8 @@ function Home() {
                 className='CompareModalButton'
                 style={{ margin: 10}}
                 onClick={() => setShowCompare(false)}
-                href={`/mypokedex/compare/${data[0].id}/${data[1]?.id?? undefined}`}
+                href={`/mypokedex/compare/${data[0].name}/${data[1]?.name?? undefined}`}
+                disabled={data.length === 2 ? false : true}
               >
                 Compare
               </Button>

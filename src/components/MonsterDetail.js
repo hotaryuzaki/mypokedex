@@ -88,11 +88,11 @@ function MonsterDetail(props) {
                 <div className="StatsBar progress">
                   <div
                     className="StatsChart progress-bar"
-                    style={{ width: `${item.base_stat}%`}}
+                    style={{ width: `${item.base_stat/255*100}%`}}
                     role="progressbar"
-                    aria-valuenow={item.base_stat}
+                    aria-valuenow={item.base_stat/255*100}
                     aria-valuemin="0"
-                    aria-valuemax="100"
+                    aria-valuemax="255"
                   >
                     {item.base_stat}
                   </div>

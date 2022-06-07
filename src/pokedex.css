@@ -321,6 +321,22 @@
   padding: 10px;
 }
 
+.Compare {
+  display: flex;
+}
+.Compare1 {
+  width: 50%;
+  display: flex;
+  padding: 10px;
+  background-color: var(--red);
+}
+.Compare2 {
+  width: 50%;
+  display: flex;
+  padding: 10px;
+  background-color: var(--purple);
+}
+
 
 
 
