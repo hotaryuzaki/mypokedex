@@ -85,7 +85,7 @@ function MonsterDetail(props) {
               <div key={index}>
                 <label className='StatsLabel'>{item.stat.name}</label>
 
-                <div className="StatsBar progress">
+                <div className="StatsBar-right progress">
                   <div
                     className="StatsChart progress-bar"
                     style={{ width: `${item.base_stat/255*100}%`}}

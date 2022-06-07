@@ -272,13 +272,25 @@
   margin-right: 5px;
 }
 
-.StatsLabel {
+.StatsLabel-left {
+  width: 100%;
   color: var(--black);
   font-size: .8em;
+  text-align: right;
 }
-.StatsBar {
-  /* background-color: var(--black) !important; */
-
+.StatsLabel-right {
+  width: 100%;
+  color: var(--black);
+  font-size: .8em;
+  text-align: left;
+}
+.StatsBar-left {
+  /* background-color: var(--pokemon) !important; */
+  justify-content: flex-end;
+}
+.StatsBar-right {
+  /* background-color: var(--pokemon) !important; */
+  justify-content: flex-start;
 }
 .StatsChart {
   color: var(--black);
@@ -321,26 +333,30 @@
   padding: 10px;
 }
 
-.Compare {
+.CompareData {
   display: flex;
+  width: 100%;
 }
-.Compare1 {
+.CompareBox {
   width: 50%;
-  display: flex;
-  padding: 10px;
-  background-color: var(--red);
+  /* background-color: var(--black); */
 }
-.Compare2 {
-  width: 50%;
-  display: flex;
+.CompareBasic {
+  width: calc(100% - 3px);
   padding: 10px;
-  background-color: var(--purple);
+  border-radius: 10px 10px 0 0;
 }
-
-
-
-
-
+.CompareStats {
+  width: calc(100% - 3px);
+  padding: 10px;
+  border-radius: 0 0 10px 10px;
+}
+.left {
+  margin-right: 3px;
+}
+.right {
+  margin-left: 3px;
+}
 
 .normal {
   background-color: var(--normal);

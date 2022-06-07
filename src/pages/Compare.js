@@ -5,7 +5,7 @@ import { FaArrowLeft, FaFilter } from "react-icons/fa";
 import axios from 'axios';
 import '../pokedex.css';
 import MyNavbar from '../components/MyNavbar';
-import MonsterProfile from '../components/MonsterProfile';
+import MonsterCompare from '../components/MonsterCompare';
 
 const pokeballIcon = process.env.PUBLIC_URL+"/pokeball-icon.svg";
 
@@ -124,8 +124,6 @@ function Compare() {
         query,
         { headers }
       );
-      
-      console.log(response.data.data);
 
       setData(response.data.data);
       setError([]);
@@ -164,17 +162,8 @@ function Compare() {
       :
       <div className='Content'>
         <MyNavbar hasBack={true} />
-        
-        <div className='Compare'>
 
-          <div className='Compare1'>
-            hahaha
-          </div>
-          <div className='Compare2'>
-            yeahhh
-          </div>
-
-        </div>
+        <MonsterCompare data={data} />
 
         { error.length > 0 && error }
       </div>

@@ -21,7 +21,7 @@ function MonsterProfile(props) {
   // RENDER
   return (
     <div className={`Monster ${data[0].pokemons[0].types[0].type.name}`}>
-      <div className={'Profile'}>
+      <div className='Profile'>
         <div className='Item'>
           <div className='ItemBox'>
             <img
