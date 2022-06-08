@@ -195,7 +195,7 @@ function Home() {
   const handleScroll = (e) => {
     let element = e.target.scrollingElement;
 
-    if (element.scrollHeight - element.scrollTop === element.clientHeight) {
+    if (element.scrollHeight - element.scrollTop <= element.clientHeight + 70) {
       setOffset(offset + limit);
     }
   };
@@ -213,7 +213,7 @@ function Home() {
       setLoading(true); // RESET PAGE LOADING
       setLoadingMore(true); // RESET PAGE LOADING MORE
       setOffset(0); // RESET PAGING
-      filterContext.setFilterValue(data);
+      filterContext.setFilterValue(data); // UPDATE GLOBAL STATE
     }
 
   }, [filterContext.filterValue]);
@@ -222,11 +222,6 @@ function Home() {
     // console.log('Home _callbackShowCheckbox HAHAHA', data)
     setShowCheckbox(data);
   }, [showCheckbox]);
-
-  const _callbackShowCompare = useCallback((data) => {
-    // console.log('Home _callbackShowCompare', data)
-    setShowCompare(data);
-  }, [filterContext.filterValue]);
 
   const _callbackCheckbox = useCallback((data) => {
     // console.log('Home _callbackCheckbox hahaha', data)
